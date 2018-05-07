@@ -1,25 +1,25 @@
-<h1 class="titleAndLogo">Weekly Reports</h1>
+<h2 class="titleAndLogo">Weekly Reports</h2>
 
 		<table class="table table-bordered">
 		  <thead>
 		    <tr>
-		      <th>Name</th>
-		      <th scope="col" ng-repeat = "date in vm.resultObject.datesThisWeek">
+		      <th class = "alignCenter">Name</th>
+		      <th class = "alignCenter" scope="col" ng-repeat = "date in vm.resultObject.datesThisWeek">
 		      	{{date}}
 		      </th>
-		      <th>Total time occupied</th>
+		      <th class = "alignCenter" ng-click = "vm.reverse = !vm.reverse">Total time occupied</th>
 		    </tr>
 		  </thead>
-		  <tbody ng-repeat = "userID in keys(vm.resultObject.weeklyResult)">
+		  <tbody ng-repeat = "result in vm.resultObject.weeklyResult | orderBy : 'totalTimeOccupied' : vm.reverse">
 		    <tr>
-		      <th scope="row">{{vm.resultObject.weeklyResult[userID].name}}</th>
+		      <th class = "alignCenter" scope="row">{{result.name}}</th>
 		      
-		      <td ng-repeat = "(date, work) in vm.resultObject.weeklyResult[userID].dateAndWork">
+		      <td class = "alignCenter" ng-repeat = "(date, work) in result.dateAndWork">
 		      		{{work}}
 		  	  </td>
 
-		      <td>
-		      		{{vm.resultObject.weeklyResult[userID].totalTimeOccupied}}
+		      <td class = "alignCenter">
+		      		{{result.totalTimeOccupied}}
 		  	  </td>
 		    </tr>
 		  </tbody>
