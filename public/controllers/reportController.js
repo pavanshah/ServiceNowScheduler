@@ -91,6 +91,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 		vm.resultObject.datesThisWeek = datesThisWeek;
 		console.log("weeklyResult "+vm.weeklyResult);
 
+		return vm.weeklyResult;
 	};
 
 	vm.findDataForThisWeek(sunday);
