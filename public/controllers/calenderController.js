@@ -17,6 +17,7 @@ schedulerApp.controller("calenderController", function($scope, $filter, $rootSco
 	vm.addEvent = false;
 	vm.addSuccess = false;
 
+
 	vm.findUserEventsForDate = function() {
 		
 		console.log("eventJSON length here "+eventJSON.length);
@@ -78,12 +79,14 @@ schedulerApp.controller("calenderController", function($scope, $filter, $rootSco
 			}
 		}
 
-		console.log(vm.events);	
+		console.log(vm.events);
 	};
 
 	//set grid initially for today's date
 	vm.findUserEventsForDate();
 
+
+	//change date with buttons
 	vm.previousDate = function(){
 		vm.selectedDate = new Date(vm.selectedDate.setDate(vm.selectedDate.getDate() - 1));
 		vm.findUserEventsForDate();
@@ -93,6 +96,8 @@ schedulerApp.controller("calenderController", function($scope, $filter, $rootSco
 		vm.selectedDate = new Date(vm.selectedDate.setDate(vm.selectedDate.getDate() + 1));
 		vm.findUserEventsForDate();
 	};
+
+
 
 	vm.addTask = function(userSchedule, columnIndex,rowIndex){
 		
@@ -111,7 +116,18 @@ schedulerApp.controller("calenderController", function($scope, $filter, $rootSco
 		}
 		else
 		{
-			alert("overlap");
+			if(typeof(userSchedule.name) != 'undefined')
+			{
+				alert("An event already exists, Can't overlap tasks");
+			}
+			else if((vm.selectedDate.getDay() == 0) || (vm.selectedDate.getDay() == 6))
+			{
+				alert("You can't add events on weekend");
+			}
+			else if(columnIndex <= 0 || columnIndex >= 10)
+			{
+				alert("You can only add events between 9 AM-5 PM");
+			}
 		}
 	}
 

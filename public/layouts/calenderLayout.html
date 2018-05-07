@@ -1,3 +1,5 @@
+<h2 class="titleAndLogo">Calender</h2>
+
 <div ng-controller="calenderController as vm">
 	
 	<md-content layout-padding ng-cloak>
@@ -17,25 +19,20 @@
 		  </div>
 		</md-content>
 
-
-		<div ng-repeat = "event in vm.events">
-			{{event.userName}}
-		</div>
-
 		<table class="table table-bordered">
 		  <thead>
 		    <tr>
-		      <th>Name</th>
-		      <th scope="col" ng-repeat = "timing in vm.events.allowedTimes">
-		      	{{timing}}
+		      <th class = "alignCenter">Name</th>
+		      <th class = "alignCenter" scope="col" ng-repeat = "timing in vm.events.allowedTimes">
+		      	{{timing | timeFilter}}
 		      </th>
 		    </tr>
 		  </thead>
 		  <tbody ng-repeat = "userEvent in vm.events.userDetails">
 		    <tr>
-		      <th scope="row">{{userEvent.userName}}</th>
+		      <th class = "alignCenter" scope="row">{{userEvent.userName}}</th>
 		      
-		      <td ng-repeat = "userSchedule in userEvent.schedule" ng-click = "vm.addTask(userSchedule, $index, $parent.$index)" ng-class="{taskClass: userSchedule.type === 'task', meetingClass: userSchedule.type === 'meeting'}">
+		      <td class = "alignCenter" ng-repeat = "userSchedule in userEvent.schedule" ng-click = "vm.addTask(userSchedule, $index, $parent.$index)" ng-class="{taskClass: userSchedule.type === 'task', meetingClass: userSchedule.type === 'meeting'}">
 		      		{{userSchedule.name}}
 		  	  </td>
 		    </tr>

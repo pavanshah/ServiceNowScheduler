@@ -7,9 +7,10 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
 	var userHashMap = data.getuserHashMap();
-	var users = data.getUsers();
-	vm.weeklyResult = {};
+	vm.users = data.getUsers();
+	vm.weeklyResult = [];
 	vm.resultObject = {};
+	vm.reverse = false;
 
 	var curr = new Date; // get current date
 	var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
@@ -26,9 +27,10 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 		{
 			var userObject = {};
 			userObject.name = userHashMap[k];
+			userObject.id = k;
 			userObject.dateAndWork = {};
 			userObject.totalTimeOccupied = 0;
-			vm.weeklyResult[k] = userObject;
+			vm.weeklyResult.push(userObject);
 		}
 
 		for(var j = 1 ; j <= 5 ; j++)
@@ -42,7 +44,13 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 			for(var k in userHashMap)
 			{
-				vm.weeklyResult[k].dateAndWork[dateToLocale] = 0;
+				for(var l = 0 ; l < vm.weeklyResult.length ; l++)
+				{
+					if(vm.weeklyResult[l].id === k)
+					{
+						vm.weeklyResult[l].dateAndWork[dateToLocale] = 0;
+					}
+				}
 			}
 
 
@@ -64,9 +72,16 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 					console.log("user "+userid);
 					var timeDifference = end_date_now.getHours() - start_date_now.getHours();
 					console.log("timeDifference "+timeDifference);
-					vm.weeklyResult[userid].totalTimeOccupied = vm.weeklyResult[userid].totalTimeOccupied + timeDifference;
-					vm.weeklyResult[userid].dateAndWork[dateToLocale] = vm.weeklyResult[userid].dateAndWork[dateToLocale] + timeDifference;
-					console.log("weeklyResult object "+vm.weeklyResult[userid].totalTimeOccupied);
+					
+					for(var l = 0 ; l < vm.weeklyResult.length ; l++)
+					{
+						if(vm.weeklyResult[l].id === userid)
+						{
+							vm.weeklyResult[l].totalTimeOccupied = vm.weeklyResult[l].totalTimeOccupied + timeDifference;
+							vm.weeklyResult[l].dateAndWork[dateToLocale] = vm.weeklyResult[l].dateAndWork[dateToLocale] + timeDifference;
+						}
+					}
+
 				}
 			}
 
@@ -79,9 +94,4 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 	};
 
 	vm.findDataForThisWeek(sunday);
-
-	$scope.keys = function(obj){
-  		return obj? Object.keys(obj) : [];
-	}
-
 });
