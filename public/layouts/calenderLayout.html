@@ -1,0 +1,105 @@
+<div ng-controller="calenderController as vm">
+	
+	<md-content layout-padding ng-cloak>
+		  <div layout-gt-xs="row">
+
+		  	<div class="alignDatepicker">
+
+		  		<button class="previous round" ng-click = "vm.previousDate()">&#8249;</button>
+
+		  		<div flex-gt-xs>
+		      		<md-datepicker style = "margin-right: 2px" ng-model="vm.selectedDate" md-placeholder="Enter date" ng-change = "vm.findUserEventsForDate()"></md-datepicker>
+		    	</div>
+
+		    	<button class="next round" ng-click = "vm.nextDate()">&#8250;</button>
+		  	</div>
+		    
+		  </div>
+		</md-content>
+
+
+		<div ng-repeat = "event in vm.events">
+			{{event.userName}}
+		</div>
+
+		<table class="table table-bordered">
+		  <thead>
+		    <tr>
+		      <th>Name</th>
+		      <th scope="col" ng-repeat = "timing in vm.events.allowedTimes">
+		      	{{timing}}
+		      </th>
+		    </tr>
+		  </thead>
+		  <tbody ng-repeat = "userEvent in vm.events.userDetails">
+		    <tr>
+		      <th scope="row">{{userEvent.userName}}</th>
+		      
+		      <td ng-repeat = "userSchedule in userEvent.schedule" ng-click = "vm.addTask(userSchedule, $index, $parent.$index)" ng-class="{taskClass: userSchedule.type === 'task', meetingClass: userSchedule.type === 'meeting'}">
+		      		{{userSchedule.name}}
+		  	  </td>
+		    </tr>
+		  </tbody>
+		</table>
+
+
+	<div ng-show="vm.addSuccess" style = "width: fit-content ; margin : auto" class="alert alert-success">
+	  <strong>Success!</strong> Added meeting request successfully.
+	</div>
+
+	<div ng-show = "vm.addEvent">
+		<h2 class="addEventTitle">Add Event</h2>
+
+		<div class="addEvent">
+		  <form name = "addEventForm">
+		    
+		    <div class="form-group row">
+		      <label for="employeeName" class="col-sm-2 col-form-label">Employee Name</label>
+		      <div class="col-sm-5">
+		      <input type="text" ng-model = "vm.employeeName" class="form-control" id="employeeName" placeholder="Employee Name" readonly>
+		      </div>
+		    </div>
+		    
+		    <div class="form-group row">
+		      <label for="eventName" class="col-sm-2 col-form-label">Event Name</label>
+		      <div class="col-sm-5">
+		        <input type="text" ng-model = "vm.eventName" class="form-control" id="eventName" placeholder="Event Name" required="true">
+		      </div>
+		    </div>
+
+		    <div class="form-group row">
+		      <label for="timeSlot" class="col-sm-2 col-form-label">Time Slot</label>
+		      <div class="col-sm-5">
+		        <input type="text" ng-model = "vm.timeSlot" class="form-control" id="timeSlot" placeholder="Time Slot" readonly>
+		      </div>
+		    </div>
+		    
+		    <fieldset class="form-group row">
+		      <label class="col-form-legend col-sm-2">Type</label>
+		      
+		      <div class="col-sm-5">
+		        <div class="form-check">
+		          <label class="form-check-label">
+		            <input class="form-check-input" type="radio" name="gridRadios" ng-model = "vm.taskType" id="gridRadios1" value="task" checked>
+		            Task
+		          </label>
+		        </div>
+		        <div class="form-check">
+		          <label class="form-check-label">
+		            <input class="form-check-input" type="radio" name="gridRadios" ng-model = "vm.taskType" id="gridRadios2" value="meeting">
+		            Meeting
+		          </label>
+		        </div>
+		      </div>
+		    </fieldset>
+		    
+		    <div class="form-group row">
+		      <div class="offset-sm-2 col-sm-10">
+		        <button type="submit" ng-disabled = "!vm.eventName.length" ng-click = "vm.addNewEvent()" class="btn btn-primary">Schedule Meeting</button>
+		      </div>
+		    </div>
+		  </form>
+		</div>
+	</div>
+	
+</div>

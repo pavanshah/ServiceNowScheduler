@@ -1,0 +1,52 @@
+.taskClass {
+	background-color: lightblue;
+}
+
+.meetingClass {
+	background-color: lightgreen;
+}
+
+.alignCenter {
+	margin: auto;
+}
+
+.alignDatepicker {
+    margin : auto;
+    display : flex;
+}
+
+.addEvent {
+	margin: auto;
+	width: 50%;
+}
+
+.addEventTitle {
+	text-align: center;
+}
+
+.titleAndLogo {
+	text-align: center;
+}
+
+.navigationButtons {
+	position:absolute;
+    top:0;
+    right:0;
+}
+
+.previous {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.next {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.round {
+    border-radius: 10%;
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}

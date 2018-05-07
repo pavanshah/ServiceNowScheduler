@@ -1,0 +1,26 @@
+<h1 class="titleAndLogo">Weekly Reports</h1>
+
+		<table class="table table-bordered">
+		  <thead>
+		    <tr>
+		      <th>Name</th>
+		      <th scope="col" ng-repeat = "date in vm.resultObject.datesThisWeek">
+		      	{{date}}
+		      </th>
+		      <th>Total time occupied</th>
+		    </tr>
+		  </thead>
+		  <tbody ng-repeat = "userID in keys(vm.resultObject.weeklyResult)">
+		    <tr>
+		      <th scope="row">{{vm.resultObject.weeklyResult[userID].name}}</th>
+		      
+		      <td ng-repeat = "(date, work) in vm.resultObject.weeklyResult[userID].dateAndWork">
+		      		{{work}}
+		  	  </td>
+
+		      <td>
+		      		{{vm.resultObject.weeklyResult[userID].totalTimeOccupied}}
+		  	  </td>
+		    </tr>
+		  </tbody>
+		</table>
