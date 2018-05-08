@@ -6,6 +6,7 @@
 1] Install node.js(If not available already) Reference link - http://blog.teamtreehouse.com/install-node-js-npm-windows</br>
 2] Open app folder and run npm install(Install all dependencies)</br>
 3] Run "node app.js"</br>
+4] Go to http://localhost:3000 in your browser and check the app
 </br>
 </br>
 
