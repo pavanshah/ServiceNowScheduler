@@ -1,4 +1,4 @@
-<h2 class="titleAndLogo">Weekly Reports</h2>
+<!-- <h2 class="titleAndLogo">Weekly Reports</h2> -->
 
 		<table class="table table-bordered">
 		  <thead>
@@ -7,7 +7,9 @@
 		      <th class = "alignCenter" scope="col" ng-repeat = "date in vm.resultObject.datesThisWeek">
 		      	{{date}}
 		      </th>
-		      <th class = "alignCenter" ng-click = "vm.reverse = !vm.reverse">Total time occupied</th>
+		      <th class = "alignCenter" ng-click = "vm.reverse = !vm.reverse">Total time occupied
+		      <div ng-class = "vm.getSortClass()"></div>
+		      </th>
 		    </tr>
 		  </thead>
 		  <tbody ng-repeat = "result in vm.resultObject.weeklyResult | orderBy : 'totalTimeOccupied' : vm.reverse">

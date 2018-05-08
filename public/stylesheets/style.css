@@ -16,8 +16,7 @@
 }
 
 .addEvent {
-	margin: auto;
-	width: 50%;
+	margin: 20px 0px 20px 130px;
 }
 
 .addEventTitle {
@@ -25,13 +24,32 @@
 }
 
 .titleAndLogo {
+    top:0;
 	text-align: center;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom : 10px solid black;
+    display: inline-block;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-top : 10px solid black;
+    display: inline-block;
 }
 
 .navigationButtons {
 	position:absolute;
-    top:0;
-    right:0;
+    top:25px;
+    right:25px;
 }
 
 .previous {

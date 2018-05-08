@@ -1,8 +1,10 @@
 var schedulerApp = angular.module("schedulerApp");
 
-schedulerApp.controller("calenderController", function($scope, $filter, $rootScope, data, dateFormat){
+schedulerApp.controller("calenderController", function($uibModal, $scope, $filter, $rootScope, data, dateFormat){
 
 	var vm = this;
+
+	$rootScope.defaultView = true;
 
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
@@ -105,14 +107,41 @@ schedulerApp.controller("calenderController", function($scope, $filter, $rootSco
 
 		if((typeof(userSchedule.name) === 'undefined') && (columnIndex > 0 && columnIndex < 10) && (vm.selectedDate.getDay() != 0) && (vm.selectedDate.getDay() != 6))
 		{
-			vm.addEvent = true;
-			console.log("dialog opened "+columnIndex+" "+rowIndex);
-			console.log("userDetails "+vm.events.userDetails[rowIndex].userName);
 
 			selectedEmployeeObject = vm.events.userDetails[rowIndex];
 			vm.employeeName = selectedEmployeeObject.userName;
 			vm.taskType = "task";
 			vm.timeSlot = vm.events.allowedTimes[columnIndex];
+
+			var modalInput = {};
+			modalInput.employeeName = vm.employeeName;
+			modalInput.taskType = vm.taskType;
+			modalInput.timeSlot = vm.timeSlot;
+
+			console.log("dialog opened "+columnIndex+" "+rowIndex);
+			console.log("userDetails "+vm.events.userDetails[rowIndex].userName);
+
+
+			var modalInstance = $uibModal.open({
+	 			 animation : true,
+			     templateUrl: 'layouts/addEventModalLayout.html',
+		      	 size: "md",
+		      	 controller:'addEventController',
+		      	 controllerAs: 'vm',
+		      	 resolve: {
+					   getInput: function() {
+					       return modalInput
+					   }
+					},
+		      	 backdrop : true
+	    	});
+
+	     	modalInstance.result.then(function (incomingObject) {
+			     console.log("incomingObject "+incomingObject.eventName);
+			     vm.eventName = incomingObject.eventName;
+			     vm.taskType = incomingObject.taskType;
+				 vm.addNewEvent();			     
+			});
 		}
 		else
 		{
