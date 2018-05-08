@@ -4,6 +4,8 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 	var vm = this;
 
+	$rootScope.defaultView = false;
+
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
 	var userHashMap = data.getuserHashMap();
@@ -95,4 +97,17 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 	};
 
 	vm.findDataForThisWeek(sunday);
+
+
+	vm.getSortClass = function(){
+		if(vm.reverse){
+			return 'arrow-down';
+		}
+		else
+		{
+			return 'arrow-up';
+		}
+	}
+
+
 });

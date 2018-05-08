@@ -22,6 +22,8 @@
 
   		<script type="text/javascript" src="controllers/schedulingController.js"></script>
 
+  		<script type="text/javascript" src="controllers/addEventController.js"></script>
+
   		<script type="text/javascript" src="controllers/calenderController.js"></script>
 
   		<script type="text/javascript" src="controllers/reportController.js"></script>
@@ -53,18 +55,21 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		<link rel = "stylesheet" type = "text/css" href = "stylesheets/style.css" />
+
+		<!--ui bootstrap for modal-->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
 		
 	</head>
 
 	<body ng-app = "schedulerApp" ng-controller="scheduleController as vm" ng-cloak>
 
 		<div class="titleAndLogo">
-			<h1>ServiceNow Scheduler</h1>
+			<img src="/images/service-now-logo.png" width="20%">
 		</div>
 
 		<div class="navigationButtons">
-			<a class="btn btn-primary" href="#!/report" role="button">View weekly report</a>
-			<a class="btn btn-primary" href="#!/calender" role="button">View calender</a>
+			<a ng-hide = "!defaultView" class="btn btn-primary" href="#!/report" role="button">View weekly report</a>
+			<a ng-hide = "defaultView" class="btn btn-primary" href="#!/calender" role="button">View calender</a>
 		</div>
 
 		<ng-view></ng-view>

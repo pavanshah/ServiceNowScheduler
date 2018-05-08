@@ -1,0 +1,57 @@
+<div>
+		<h2 class="addEventTitle">Add New Event</h2>
+
+		<div class="addEvent">
+		  <form name = "addEventForm">
+		    
+		    <div class="form-group row">
+		      <label for="employeeName" class="col-sm-2 col-form-label">Employee Name</label>
+		      <div class="col-sm-5">
+		      <input type="text" ng-model = "vm.employeeName" class="form-control" id="employeeName" placeholder="Employee Name" readonly>
+		      </div>
+		    </div>
+		    
+		    <div class="form-group row">
+		      <label for="eventName" class="col-sm-2 col-form-label">Event Name</label>
+		      <div class="col-sm-5">
+		        <input type="text" ng-model = "vm.eventName" class="form-control" id="eventName" placeholder="Event Name" required="true">
+		      </div>
+		    </div>
+
+		    <div class="form-group row">
+		      <label for="timeSlot" class="col-sm-2 col-form-label">Time Slot</label>
+		      <div class="col-sm-5">
+		        <input type="text" ng-model = "vm.timeSlot | timeFilter" class="form-control" id="timeSlot" placeholder="Time Slot" readonly>
+		      </div>
+		    </div>
+		    
+		    <fieldset class="form-group row">
+		      <label class="col-form-legend col-sm-2">Type</label>
+		      
+		      <div class="col-sm-5">
+		        <div class="form-check">
+		          <label class="form-check-label">
+		            <input class="form-check-input" type="radio" name="gridRadios" ng-model = "vm.taskType" id="gridRadios1" value="task" checked>
+		            Task
+		          </label>
+		        </div>
+		        <div class="form-check">
+		          <label class="form-check-label">
+		            <input class="form-check-input" type="radio" name="gridRadios" ng-model = "vm.taskType" id="gridRadios2" value="meeting">
+		            Meeting
+		          </label>
+		        </div>
+		      </div>
+		    </fieldset>
+		    
+		    <div class="form-group row">
+		      <div class="col-sm-4">
+		        <button type="submit" ng-disabled = "!vm.eventName.length" ng-click = "vm.submit()" class="btn btn-primary">Schedule Meeting</button>
+		      </div>
+		      <div class="col-sm-6">
+		        <button type="button" ng-click = "vm.close()" class="btn btn-primary">Cancel</button>
+		      </div>
+		    </div>
+		  </form>
+		</div>
+</div>
