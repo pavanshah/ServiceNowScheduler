@@ -18,13 +18,14 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	vm.events.allowedTimes = allowedTimes;
 	vm.addEvent = false;
 	vm.addSuccess = false;
+	vm.someError = false;
 
 
 	vm.findUserEventsForDate = function() {
-		
-		console.log("eventJSON length here "+eventJSON.length);
+
 		vm.events.eventDetails = [];
 		vm.events.userDetails = [];
+		vm.someError = false;
 
 		for(var k in userHashMap)
 		{
@@ -90,11 +91,15 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 
 	//change date with buttons
 	vm.previousDate = function(){
+		vm.someError = false;
+		vm.addSuccess = false;
 		vm.selectedDate = new Date(vm.selectedDate.setDate(vm.selectedDate.getDate() - 1));
 		vm.findUserEventsForDate();
 	};
 
 	vm.nextDate = function() {
+		vm.someError = false;
+		vm.addSuccess = false;
 		vm.selectedDate = new Date(vm.selectedDate.setDate(vm.selectedDate.getDate() + 1));
 		vm.findUserEventsForDate();
 	};
@@ -104,6 +109,7 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	vm.addTask = function(userSchedule, columnIndex,rowIndex){
 		
 		vm.addSuccess = false;
+		vm.someError = false;
 
 		if((typeof(userSchedule.name) === 'undefined') && (columnIndex > 0 && columnIndex < 10) && (vm.selectedDate.getDay() != 0) && (vm.selectedDate.getDay() != 6))
 		{
@@ -147,15 +153,18 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 		{
 			if(typeof(userSchedule.name) != 'undefined')
 			{
-				alert("An event already exists, Can't overlap tasks");
+				vm.errorMessage = "An event already exists, Can't overlap tasks";
+				vm.someError = true;
 			}
 			else if((vm.selectedDate.getDay() == 0) || (vm.selectedDate.getDay() == 6))
 			{
-				alert("You can't add events on weekend");
+				vm.errorMessage = "You can't add events on weekend";
+				vm.someError = true;
 			}
 			else if(columnIndex <= 0 || columnIndex >= 10)
 			{
-				alert("You can only add events between 9 AM-5 PM");
+				vm.errorMessage = "You can only add events between 9 AM-5 PM";
+				vm.someError = true;
 			}
 		}
 	}
@@ -194,16 +203,9 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 			"user": selectedEmployee.userID
 	  	}
 
-	  	console.log("eventJSON length before "+eventJSON.length);
-
 	  	eventJSON.push(newEventObject);
-
-	  	console.log("eventJSON length after "+eventJSON.length);
-
 		vm.addEvent = false;
-
 		vm.eventName = "";
-
 		vm.addSuccess = true;
 
 		vm.findUserEventsForDate();

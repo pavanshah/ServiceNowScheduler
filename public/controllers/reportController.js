@@ -5,6 +5,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 	var vm = this;
 
 	$rootScope.defaultView = false;
+	$scope.dataForHighcharts = [];
 
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
@@ -22,8 +23,8 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 	vm.findDataForThisWeek = function(sunday){
 
-		console.log("sunday "+sunday);
 		var datesThisWeek = [];
+		$scope.dataForHighcharts = [];
 
 		for(var k in userHashMap)
 		{
@@ -39,8 +40,6 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 		{
 			var date = new Date();
 			date.setDate(sunday.getDate() + j);
-			console.log("date "+date);
-
 			var dateToLocale = date.toLocaleDateString();
 			datesThisWeek.push(dateToLocale);
 
@@ -58,22 +57,16 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 			for(var i = 0 ; i < eventJSON.length ; i++)
 			{
-				console.log("inside");
 				var start_date = eventJSON[i].start_date_time;
 				var end_date = eventJSON[i].end_date_time;
 
 				var start_date_now = dateFormat.formatDate(start_date);
 				var end_date_now = dateFormat.formatDate(end_date);
 
-				console.log("date "+date);
-				console.log("start_date_now "+start_date_now);
-
 				if((date.toDateString() == start_date_now.toDateString()))
 				{	
 					var userid = eventJSON[i].user;
-					console.log("user "+userid);
 					var timeDifference = end_date_now.getHours() - start_date_now.getHours();
-					console.log("timeDifference "+timeDifference);
 					
 					for(var l = 0 ; l < vm.weeklyResult.length ; l++)
 					{
@@ -91,13 +84,20 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 		vm.resultObject.weeklyResult = vm.weeklyResult;
 		vm.resultObject.datesThisWeek = datesThisWeek;
-		console.log("weeklyResult "+vm.weeklyResult);
 
+		for(var i = 0 ; i < vm.weeklyResult.length ; i++)
+		{
+			var highchartsObject = {};
+			highchartsObject.name = vm.weeklyResult[i].name;
+			highchartsObject.y = vm.weeklyResult[i].totalTimeOccupied;
+			$scope.dataForHighcharts.push(highchartsObject);
+		}
+
+		drawPieChart();
 		return vm.weeklyResult;
 	};
 
 	vm.findDataForThisWeek(sunday);
-
 
 	vm.getSortClass = function(){
 		if(vm.reverse){
@@ -109,5 +109,42 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 		}
 	}
 
+
+function drawPieChart(){
+
+	Highcharts.chart('container', {
+	    chart: {
+	        plotBackgroundColor: null,
+	        plotBorderWidth: null,
+	        plotShadow: false,
+	        type: 'pie'
+	    },
+	    title: {
+	        text: 'Total no. of hours occupied this Week/Employee'
+	    },
+	    tooltip: {
+	        pointFormat: '{series.name}: <b>{point.y}</b>'
+	    },
+	    plotOptions: {
+	        pie: {
+	            allowPointSelect: true,
+	            cursor: 'pointer',
+	            dataLabels: {
+	                enabled: true,
+	                format: '<b>{point.name}</b>: {point.y}'+' Hours',
+	                style: {
+	                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                }
+	            }
+	        }
+	    },
+	    series: [{
+	        name: 'No. of hours occupied',
+	        colorByPoint: true,
+	        data: $scope.dataForHighcharts
+	    	}]
+		});
+
+}
 
 });
