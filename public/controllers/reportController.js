@@ -4,22 +4,26 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 
 	var vm = this;
 
+	//Change navigation button text
 	$rootScope.defaultView = false;
 	$scope.dataForHighcharts = [];
 
+	//Get all the data from data service
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
 	var userHashMap = data.getuserHashMap();
 	vm.users = data.getUsers();
+
 	vm.weeklyResult = [];
 	vm.resultObject = {};
-	vm.reverse = false;
+
+	vm.reverse = false;	//To decide sorting order for column
 
 	var curr = new Date; // get current date
 	var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
 	var last = first + 6; // last day is the first day + 6
 
-	var sunday = new Date(curr.setDate(first)); //sunday
+	var sunday = new Date(curr.setDate(first)); //first day of this week
 
 	vm.findDataForThisWeek = function(sunday){
 
@@ -41,7 +45,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 			var date = new Date();
 			date.setDate(sunday.getDate() + j);
 			var dateToLocale = date.toLocaleDateString();
-			datesThisWeek.push(dateToLocale);
+			datesThisWeek.push(dateToLocale);	//Array of all the dates this week
 
 			for(var k in userHashMap)
 			{
@@ -49,6 +53,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 				{
 					if(vm.weeklyResult[l].id === k)
 					{
+						//Initialize user-work/date object
 						vm.weeklyResult[l].dateAndWork[dateToLocale] = 0;
 					}
 				}
@@ -70,6 +75,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 					
 					for(var l = 0 ; l < vm.weeklyResult.length ; l++)
 					{
+						//Pushing data to matching user object
 						if(vm.weeklyResult[l].id === userid)
 						{
 							vm.weeklyResult[l].totalTimeOccupied = vm.weeklyResult[l].totalTimeOccupied + timeDifference;
@@ -85,6 +91,7 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 		vm.resultObject.weeklyResult = vm.weeklyResult;
 		vm.resultObject.datesThisWeek = datesThisWeek;
 
+		//Creating data for piechart
 		for(var i = 0 ; i < vm.weeklyResult.length ; i++)
 		{
 			var highchartsObject = {};
@@ -93,12 +100,15 @@ schedulerApp.controller("reportController", function($scope, $rootScope, data, d
 			$scope.dataForHighcharts.push(highchartsObject);
 		}
 
+		//draw piechart
 		drawPieChart();
+
 		return vm.weeklyResult;
 	};
 
 	vm.findDataForThisWeek(sunday);
 
+	//CSS class for up/down arrow 
 	vm.getSortClass = function(){
 		if(vm.reverse){
 			return 'arrow-down';
@@ -146,5 +156,4 @@ function drawPieChart(){
 		});
 
 }
-
 });

@@ -4,13 +4,16 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 
 	var vm = this;
 
+	//To change navigation button text
 	$rootScope.defaultView = true;
 
+	//Import all the data from data service
 	var eventJSON = data.geteventJSON();
 	var userJSON = data.getuserJSON();
 	var userHashMap = data.getuserHashMap();
 	var users = data.getUsers();
 	var allowedTimes = data.getAllowedTimes();
+
 	var selectedEmployeeObject = {};
 
 	vm.selectedDate = new Date();
@@ -21,18 +24,21 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	vm.someError = false;
 
 
+	//Find events for a particular date
 	vm.findUserEventsForDate = function() {
 
 		vm.events.eventDetails = [];
 		vm.events.userDetails = [];
 		vm.someError = false;
 
+		//Creating user objects to store events
 		for(var k in userHashMap)
 		{
 			var userEventDetails = {};
 			userEventDetails.userID = k;
 			userEventDetails.userName = userHashMap[k];
 			var schedule = {};
+
 			for(var l = 0 ; l < vm.events.allowedTimes.length ; l++)
 			{
 				schedule[vm.events.allowedTimes[l]] = {};
@@ -49,11 +55,13 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 			var start_date = eventJSON[i].start_date_time;
 			var end_date = eventJSON[i].end_date_time;
 
+			//Converting to regular date format
 			var start_date_now = dateFormat.formatDate(start_date);
 			var end_date_now = dateFormat.formatDate(end_date);
 
 			if((date.toDateString() == start_date_now.toDateString()))
 			{
+				//Creating event objects for selected date
 				var eventObject = {};
 				eventObject.userName = userHashMap[eventJSON[i].user];
 				eventObject.start_date_time = start_date_now;
@@ -75,7 +83,7 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 						for(var n = start_timeValue ; n < end_timeValue ; n++)
 						{
 							n = parseInt(n);
-							user.schedule[n] = eventObject;
+							user.schedule[n] = eventObject;	//Event details stored against user id
 						}
 					}
 				}	
@@ -105,7 +113,7 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	};
 
 
-
+	//Check if adding a task here is allowed or not
 	vm.addTask = function(userSchedule, columnIndex,rowIndex){
 		
 		vm.addSuccess = false;
@@ -124,10 +132,6 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 			modalInput.taskType = vm.taskType;
 			modalInput.timeSlot = vm.timeSlot;
 
-			console.log("dialog opened "+columnIndex+" "+rowIndex);
-			console.log("userDetails "+vm.events.userDetails[rowIndex].userName);
-
-
 			var modalInstance = $uibModal.open({
 	 			 animation : true,
 			     templateUrl: 'layouts/addEventModalLayout.html',
@@ -143,14 +147,15 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	    	});
 
 	     	modalInstance.result.then(function (incomingObject) {
-			     console.log("incomingObject "+incomingObject.eventName);
+			 	 //Data received from add event modal
 			     vm.eventName = incomingObject.eventName;
 			     vm.taskType = incomingObject.taskType;
-				 vm.addNewEvent();			     
+				 vm.addNewEvent();		//Adding event	     
 			});
 		}
 		else
 		{
+			//print error message
 			if(typeof(userSchedule.name) != 'undefined')
 			{
 				vm.errorMessage = "An event already exists, Can't overlap tasks";
@@ -171,28 +176,17 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 
 
 	vm.addNewEvent = function(){
-		console.log("employeeObject "+selectedEmployeeObject.userID);
-		console.log("taskType "+vm.taskType);
-		console.log("event name "+vm.eventName);
-		console.log("time slot "+vm.timeSlot);
-		
 		var selectedEmployee = selectedEmployeeObject;
 		var task = vm.taskType;
 		var event = vm.eventName;
 		var startTime = vm.timeSlot;
 
-		console.log("startTime "+startTime);
 		var newDate = new Date(vm.selectedDate.setHours(startTime, 00, 00))
-		console.log("newDate "+newDate);
-
 		var startDate = dateFormat.reFormatDate(newDate);
 		var oneHourLater = new Date(newDate.setHours(newDate.getHours()+1));
-
 		var endDate = dateFormat.reFormatDate(oneHourLater);
 
-		console.log("startDate "+startDate);
-		console.log("endDate "+endDate);
-
+		//Object to be displayed on calender
 		var newEventObject = 
 		{
 			"type": task,
@@ -212,6 +206,7 @@ schedulerApp.controller("calenderController", function($uibModal, $scope, $filte
 	}
 
 
+	//Create 32 character unique id for new events
 	function getUniqueID() {
 	  function s4() {
 	    return Math.floor((1 + Math.random()) * 0x10000)
